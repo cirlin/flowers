@@ -1,0 +1,232 @@
+<html xmlns:v="VML">
+<head >
+<title>АЛЬБОМ ФОТОГРАФИЙ</title>
+<style>v\: * { behavior: url(#default#VML);display:inline-block }</style>
+<script language="JavaScript">
+var pc=new Array(26);
+for(var i=0;i<pc.length;i++)
+     {
+      pc[i]=new Image;
+      pc[i].src='picture/'+i+'.jpg'
+     }
+for(var i=0;i<parent.album.length;i++)
+     {
+parent.album[i]=new Image;
+parent.album[i].src='album/'+i+'.jpg';
+     }
+var w=321
+var h=214
+var Xc=Math.round(w*0.5);
+var W=100
+var H=150
+var Hc=Math.round(H*0.5);
+var xc=-Xc;
+var yc=-Math.round(h*0.5);
+var Yc=-(Hc+yc); 
+var flagie=(navigator.appName=="Microsoft Internet Explorer");
+var page=0;
+var Vector=function(x,y)
+{
+this.x=x;
+this.y=y;
+}
+function drawPoligon(a,b,c,d,e,name,pic)
+{
+if(flagie) 
+   {
+var ob=document.getElementById(name);
+ob.path="m "+[a.x,a.y]+" l"+[b.x,b.y,c.x,c.y,d.x,d.y,e.x,e.y]+" x e"
+ob.fillcolor='white';
+ob.fill.type="frame";
+ob.fill.src=pic.src;
+   }
+else
+   {
+var canvas = document.getElementById(name+'C');
+var ctx = canvas.getContext('2d');
+ctx.beginPath ();
+ctx.moveTo (a.x,a.y);
+ctx.lineTo (b.x,b.y);
+ctx.lineTo (c.x,c.y);
+ctx.lineTo (d.x,d.y);
+ctx.lineTo (e.x,e.y);
+ctx.lineTo (a.x,a.y);
+ctx.closePath ();
+ctx.fillStyle='white';
+ctx.fill();
+ctx.strokeStyle="rgb(0,0,0)";
+ctx.stroke();
+var dx=(d.x>0)?Math.min(a.x,b.x):Math.max(a.x,b.x);
+var dy=Math.min(b.y,c.y,d.y);
+var dh=H-dy;
+var dw=(a.y!=e.y)?Math.abs(d.x):Math.abs(d.x-dx);
+ctx.globalCompositeOperation="source-atop";          
+ctx.drawImage (pic,Math.min(dx,d.x),dy,dw,dh);
+ctx.globalCompositeOperation="source-over";
+   }       
+}
+var name=new Array('G','G0','G1','G2');
+var flag=true;
+function setcan()
+{
+for(var i in name)
+        {
+if(flagie)off(name[i]);
+else       {
+var canvas = document.getElementById(name[i]+'C');
+var ctx = canvas.getContext('2d');
+if(flag)ctx.translate(Xc,Yc);
+ctx.clearRect(-Xc,-Yc,w,h);
+           }
+        }
+}
+function off(g){drawPoligon(mTop,mTop,mTop,mTop,mTop,g,'')}
+function rPage(pic){drawPoligon(mBottom,rBottom,rBottom,rTop,mTop,'G',pic)}
+function lPage(pic){drawPoligon(mBottom,lBottom,lBottom,lTop,mTop,'G0',pic)}
+var flug=false;
+function draw()
+{
+setcan();flag=false;
+if(page<pc.length)rPage(pc[page]);
+if(page>0)lPage(pc[page-1]);
+var A,B,C,D,E;
+A=mBottom;E=mTop;
+if(flMouse)
+    {
+var X=(right)?Math.round((W+Mousy.x+(H-Mousy.y)*(H-Mousy.y)/(Mousy.x-W))/2)
+             :Math.round((Mousy.x-W+(H-Mousy.y)*(H-Mousy.y)/(Mousy.x+W))/2);
+var Y=(right)?Math.round((H+Mousy.y+(W-Mousy.x)*(W-Mousy.x)/(Mousy.y-H))/2)
+             :Math.round((H+Mousy.y+(W+Mousy.x)*(W+Mousy.x)/(Mousy.y-H))/2);
+var x=(right)?W:-W;
+var w=x;
+var y=Y,h=Y;
+if(Y<0)
+       {
+x=(right)?Math.round(Y*(W-X)/(H-Y)+W):Math.round(Y*(W+X)/(Y-H)-W);
+y=0;
+w=Math.round(x+Y*(X-Mousy.x)/(H-Y));          
+h=Math.round(Y*(H-Mousy.y)/(H-Y));
+       }
+setcan();
+if(page<(pc.length-((right)?2:0)))rPage((right)?pc[page+2]:pc[page]);
+if(page>((right)?1:2))lPage((right)?pc[page-1]:pc[page-3]);
+B=new Vector(X,H);C=new Vector(x,y);D=new Vector(x,0);
+drawPoligon(A,B,C,D,E,'G1',(right)?pc[page]:pc[page-1]);
+A=new Vector(X,H);B=Mousy;C=new Vector(w,h);D=new Vector(x,y);E=new Vector(X,H);
+drawPoligon(A,B,C,D,E,'G2',(right)?pc[page+1]:pc[page-2]);
+    }
+else if(flug)
+    { 
+setcan();   
+if(distance((right)?lBottom:rBottom,Mousy)<W/2)
+page=(right)?((page==pc.length)?pc.length:page+2):((page==0)?0:page-2);
+if(page<pc.length-1)rPage(pc[page]);
+if(page>0)lPage(pc[page-1]);
+flug=false;
+    } 
+}   
+function distance(a,b)
+{
+return Math.sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));
+}
+function inside(a,b,c)
+{
+return(!((Math.min(a.x,b.x)>c.x)||(Math.max(a.x,b.x)<c.x)||
+(Math.min(a.y,b.y)>c.y)||(Math.max(a.y,b.y)<c.y)));
+}
+var rBottom=new Vector(W,H);
+var mBottom=new Vector(0,H);
+var lBottom=new Vector(-W,H);
+var rTop=new Vector(W,0);
+var mTop=new Vector(0,0);
+var lTop=new Vector(-W,0);
+var mCenter=new Vector(0,Hc);
+var Mousy=mTop;
+var flMouse=false;
+var right=true;
+function flager(r)
+{
+document.body.style.cursor="pointer";
+flMouse=true;
+flug=true;
+right=r;
+}
+function hook(evt)
+{
+var e=(window.event)?window.event:evt;
+Mousy=new Vector(e.clientX-Xc,e.clientY-Yc);
+if(inside(lTop,rBottom,Mousy))
+if((distance(rBottom,Mousy)<30)&&(page<pc.length))flager(true);
+else if((distance(lBottom,Mousy)<30)&&(page>0))flager(false);
+else Mousy=mTop;else Mousy=mTop;return false; 
+}
+var flik=true;
+function unhook()
+{
+if(flMouse)
+   {
+flMouse=false;
+document.body.style.cursor="auto";
+flik=false;
+   }
+else flik=true;
+ 
+}
+function scroll(evt)
+{
+if(flMouse)
+   {
+var e=(window.event)?window.event:evt;
+if((e.clientX==null)||(!e.clientY))return false
+     
+var X=e.clientX-Xc;
+var Y=e.clientY-Yc;
+X=(X<=-W)?-W+1:(X>=W)?W-1:X;
+Y=(Y<=0)?0:(Y>=H)?H-1:Y;
+if((H-Y)*(H-Y)+X*X>=W*W)
+{
+Y=(Y>H-W)?Y:H-W;
+var x=Math.round(Math.sqrt(W*W-(H-Y)*(H-Y)));
+X=(X>=0)?x:-x;
+}
+Mousy=new Vector(X,Y);
+   }
+   
+return false;
+}
+
+function cliker(evt)
+{
+var e=(window.event)?window.event:evt; 
+Mousy=new Vector(e.clientX-Xc,e.clientY-Yc);
+if((flik)&&page&&(page!=pc.length)&&inside(rBottom,lTop,Mousy))
+  {
+var ialb=(inside(lTop,mCenter,Mousy))?0:(inside(lBottom,mCenter,Mousy))?1:
+(inside(rTop,mCenter,Mousy))?2:3;
+ialb+=(page-2)*2;
+ialb=((ialb>32)&&(ialb%2))?'p'+(ialb-1):'p'+ialb;
+flik=false;
+parent.vision(ialb);
+  }
+}
+document.onmousemove=scroll;
+document.onmouseup=unhook;
+document.onmousedown=hook;
+document.onclick=cliker;
+parent.document.body.onmousemove=function(){return false};
+parent.document.body.onmouseup=unhook;
+with(document)if(!flagie)for(var i in name)write("<canvas id="+name[i]+"C ",
+"width="+w+" height="+h+" style='position:absolute;top:0;left:0'",
+"title='ЛИСТАТЬ ЗА НИЖНИЙ ПРАВЫЙ УГОЛ НАЛЕВО, А ЗА ЛЕВЫЙ - НАПРАВО'></canvas>");
+</script></head><body onLoad="setInterval('draw()',50)"><script>
+with(document)if(flagie)
+     {
+write("<v:group style='position:absolute;top:0;left:0;width:"+w+";height:"+h+"'",
+" coordsize='"+w+","+h+"' coordorigin='"+xc+","+yc+"'",
+"title='ЛИСТАТЬ ЗА НИЖНИЙ ПРАВЫЙ УГОЛ НАЛЕВО, А ЗА ЛЕВЫЙ - НАПРАВО'>");
+for(var i in name)write("<v:shape id="+name[i],
+" style='position:absolute;left:"+xc+";top:"+(Yc-h)+";width:"+w+";height:"+h+"'",
+"strokecolor='black'/>");
+write("</v:group>");
+     }
+</script></body></html>
