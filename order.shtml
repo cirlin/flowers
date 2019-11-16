@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>ЦВЕТОЧНЫЙ МАГАЗИН НА КУЗНЕЧНОМ</TITLE>
+<META  name="keywords" content="цветы,букеты,композиции,подарки,живопись">
+<META name="description" content="интернет-магазин,салон,студия">
+<META http-equiv=Content-Type content="text/html; charset=UTF-8">
+<META content="MSHTML 6.00.2600.0" name=GENERATOR>
+<LINK href="img/style.css" type=text/css rel=stylesheet>
+<SCRIPT language="JavaScript">
+var inputs=['surname','name','patronymic','adres','time','phone','mail','reset','submit'];
+var labels=['Фамилия','Имя','Отчество','Адрес доставки','Время доставки','Телефон','E-mail',
+'Форма оплаты'];
+var labs=['Фамилия','Имя','Отчество','Адрес','Время','Телефон','E-mail','Оплата'];
+function formtest()
+{
+var hv=document.getElementById('hidden').value;
+hv='';
+for(var i=0;i<inputs.length-2;i++)
+     {
+var o=document.getElementById(inputs[i]);
+var ob=o.value;
+if((!ob.length)||
+   ((i==6)&&(!/[^@]+@(\w+\.)+\w+/.test(ob)))||
+   ((i==5)&&((!/^[\d\)\(\x20+-]/.test(ob))||(/[^0-9\)\(\x20+-]/.test(ob))))||
+   ((i==4)&&((!/^[\d+\.\x20+-]/.test(ob))||(/[^0-9\.\x20+-]/.test(ob))))||
+   ((i==3)&&(!/^\d{6}(\W+\d)/.test(ob)))||
+   ((i<3)&&(/\w/.test(ob)))) 
+       {
+       o.style.backgroundColor='#FF7060';
+       alert('анкета заполнена неправильно!');
+       return false;
+       }
+     }
+return true;
+}
+function formcleen()
+{
+for(var i=0;i<inputs.length-2; i++)
+     {
+var o=document.getElementById(inputs[i]);
+o.style.backgroundColor='#FFFFFF';
+     }
+return true;
+}
+function fy(o)
+{
+o.style.backgroundColor='#FFFFB0';
+}
+function fw(o)
+{
+o.style.backgroundColor='#FFFFFF';
+}
+</SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="img/script.js"></SCRIPT>
+</HEAD>
+<BODY onload="setall()"></BODY>
